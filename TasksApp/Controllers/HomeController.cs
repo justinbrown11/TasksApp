@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,30 +12,120 @@ namespace TasksApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        // Database context
+        private TasksDatabaseContext _taskDbContext { get; set; }
 
-        //****insert stuff for context file
-        //
-        //
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(TasksDatabaseContext t)
         {
-            _logger = logger;
+            _taskDbContext = t;
         }
 
+        // Homepage
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        // View tasks page
+        public IActionResult ViewTasks()
         {
+            var tasks = _taskDbContext.Responses
+                .Include(x => x.Category)
+                .OrderBy(x => x.DueDate)
+                .ToList();
+
+            return View(tasks);
+        }
+
+        // Add new task form view
+        [HttpGet]
+        public IActionResult NewTask()
+        {
+            ViewBag.Categories = _taskDbContext.Categories.ToList();
+            ViewBag.Header = "Add a new task";
+
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        // New task form submission
+        [HttpPost]
+        public IActionResult NewTask(Tasks t)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            // Check if data is valid
+            if (ModelState.IsValid)
+            {
+                _taskDbContext.Add(t);
+                _taskDbContext.SaveChanges();
+
+                return View("Confirmation", t);
+            }
+
+            // Data invalid, return back the form
+            else
+            {
+                ViewBag.Categories = _taskDbContext.Categories.ToList();
+                ViewBag.Header = "Add a new movie";
+
+                return View(t);
+            }
+        }
+
+        // Edit task form
+        [HttpGet]
+        public IActionResult EditTask(int taskId)
+        {
+            // Grab task by id passed
+            var task = _taskDbContext.Responses.Single(x => x.TaskID == taskId);
+
+            ViewBag.Categories = _taskDbContext.Categories.ToList();
+            ViewBag.Header = $"Edit {task.TaskName}";
+
+            // Return NewTask form with current task selected
+            return View("NewTask", task);
+        }
+
+        // Edit form submission
+        [HttpPost]
+        public IActionResult EditTask(Tasks t)
+        {
+            // Check if data is valid
+            if (ModelState.IsValid)
+            {
+                _taskDbContext.Update(t);
+                _taskDbContext.SaveChanges();
+
+                return RedirectToAction("ViewTasks"); // Redirect back to movies list
+            }
+
+            // Data invalid, return back the form
+            else
+            {
+                ViewBag.Categories = _taskDbContext.Categories.ToList();
+                ViewBag.Header = $"Edit {t.TaskName}";
+
+                return View("NewTask", t);
+            }
+        }
+
+        // Delete task confirmation page
+        [HttpGet]
+        public IActionResult DeleteTask(int taskId)
+        {
+            // Grab selected task
+            var task = _taskDbContext.Responses.Single(x => x.TaskID == taskId);
+
+            return View(task);
+        }
+
+        // Delete task form submission
+        [HttpPost]
+        public IActionResult DeleteTask(Tasks t)
+        {
+            _taskDbContext.Responses.Remove(t);
+            _taskDbContext.SaveChanges();
+
+            // Redirect back to tasks view
+            return RedirectToAction("ViewTasks");
         }
     }
 }
