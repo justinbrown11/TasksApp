@@ -44,7 +44,7 @@ namespace TasksApp.Controllers
             ViewBag.Categories = _taskDbContext.Categories.ToList();
             ViewBag.Header = "Add a new task";
 
-            return View();
+            return View("NewTask", new Tasks());
         }
 
         // New task form submission
@@ -72,10 +72,10 @@ namespace TasksApp.Controllers
 
         // Edit task form
         [HttpGet]
-        public IActionResult EditTask(int taskId)
+        public IActionResult EditTask(int TaskID)
         {
             // Grab task by id passed
-            var task = _taskDbContext.Responses.Single(x => x.TaskID == taskId);
+            var task = _taskDbContext.Responses.Single(x => x.TaskID == TaskID);
 
             ViewBag.Categories = _taskDbContext.Categories.ToList();
             ViewBag.Header = $"Edit {task.TaskName}";
@@ -109,10 +109,10 @@ namespace TasksApp.Controllers
 
         // Delete task confirmation page
         [HttpGet]
-        public IActionResult DeleteTask(int taskId)
+        public IActionResult DeleteTask(int TaskID)
         {
             // Grab selected task
-            var task = _taskDbContext.Responses.Single(x => x.TaskID == taskId);
+            var task = _taskDbContext.Responses.Single(x => x.TaskID == TaskID);
 
             return View(task);
         }
