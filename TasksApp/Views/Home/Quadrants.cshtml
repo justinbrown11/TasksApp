@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Quadrants";
+}
+
+<!-- Import the model for the list of tasks -->
+@model List<Tasks>
+<!-- Construct framework of quadrant display -->
+<body>
+    <div class="container">
+        <!-- Title header -->
+        <div class="row">
+            <div class="col-sm-11 quadrant-title border border-dark font-weight-bold">
+                Stephen Covey's Time Management Matrix
+            </div>
+        </div>
+        <!-- "Urgent" and "Not urgent" headers -->
+        <div class="row">
+            <div class="col-sm-1 quadrant-header border border-dark">
+            </div>
+            <div class="col-sm-5 quadrant-header border border-dark">
+                Urgent
+            </div>
+            <div class="col-sm-5 quadrant-header border border-dark">
+                Not Urgent
+            </div>
+        </div>
+        <div class="row">
+            <!-- Side top header -->
+            <div class="col-sm-1 quadrant-header-side border border-dark">
+                <h4 class="text-nowrap" style="transform: rotate(-90deg)">Important</h4>
+            </div>
+            <!-- Quadrant 1 -->
+            <div class="col-sm-5 quadrant border border-dark">
+                <div class="container" style="text-align:center">
+                    <h4 class="font-weight-bold">Quadrant 1<br /></h4>
+                    <!-- Iterate through each task in the imported task model -->
+                    @foreach (var x in Model)
+                    {
+                        <!-- If the task quadrant matches the current quadrant and also is still not completed, add the task name to the quadrant -->
+                        @if ((x.Quadrant == 1) & (x.Completed == false))
+                        {
+                            <h4>@x.TaskName</h4>
+
+                        }
+                    }
+                </div>
+            </div>
+            <!-- Repeat steps for Quadrant 1 for Quadrant 2 -->
+            <div class="col-sm-5 quadrant border border-dark">
+                <div class="container" style="text-align:center">
+                    <h4 class="font-weight-bold">Quadrant 2<br /></h4>
+                    @foreach (var x in Model)
+                    {
+                        @if ((x.Quadrant == 2) & (x.Completed == false))
+                        {
+                            <h4>@x.TaskName</h4>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Side bottom header -->
+            <div class="col-sm-1 quadrant-header-side border border-dark">
+                <h4 class="text-nowrap" style="transform: rotate(-90deg)">Not Important</h4>
+            </div>
+            <!-- Repeat steps for Quadrant 1 for Quadrant 3 -->
+            <div class="col-sm-5 quadrant border border-dark">
+                <div class="container" style="text-align:center">
+                    <h4 class="font-weight-bold">Quadrant 3<br /></h4>
+                    @foreach (var x in Model)
+                    {
+                        @if ((x.Quadrant == 3) & (x.Completed == false))
+                        {
+                            <h4>@x.TaskName</h4>
+
+                        }
+                    }
+                </div>
+            </div>
+            <!-- Repeat steps for Quadrant 1 for Quadrant 4 -->
+            <div class="col-sm-5 quadrant border border-dark">
+                <div class="container" style="text-align:center">
+                    <h4 class="font-weight-bold">Quadrant 4<br /></h4>
+                    @foreach (var x in Model)
+                    {
+                        @if ((x.Quadrant == 4) & (x.Completed == false))
+                        {
+                            <h4>@x.TaskName</h4>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
