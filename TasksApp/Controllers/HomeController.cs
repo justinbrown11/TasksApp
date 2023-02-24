@@ -140,5 +140,21 @@ namespace TasksApp.Controllers
 
             return View(tasks);
         }
+
+        // Mark task as complete
+        [HttpGet]
+        public IActionResult MarkComplete(int TaskID)
+        {
+            // Grab selected task
+            var task = _taskDbContext.Responses.Single(x => x.TaskID == TaskID);
+
+            task.Completed = true;
+
+            _taskDbContext.Responses.Update(task);
+            _taskDbContext.SaveChanges();
+
+            // Redirect back to tasks view
+            return RedirectToAction("ViewTasks");
+        }
     }
 }

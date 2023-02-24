@@ -25,6 +25,7 @@
                 <td>@x.Completed</td>
                 <td>@x.Category.CategoryName</td>
 
+                <td><a asp-controller="Home" asp-action="MarkComplete" asp-route-TaskID="@x.TaskID">Mark as Completed</a></td>
                 <td><a asp-controller="Home" asp-action="EditTask" asp-route-TaskID="@x.TaskID">Edit</a></td>
                 <td><a asp-controller="Home" asp-action="DeleteTask" asp-route-TaskID="@x.TaskID">Delete</a></td>
             </tr>
