@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Delete Task";
+}
+
+<!-- Import model for the list of tasks -->
+@model Tasks
+
+<!-- Task deletion confirmation page -->
+<div class="container p-3 bg-light text-center">
+    <h2>Confirm Deletion</h2>
+    <h4>Are you sure you want to delete the task: @Model.TaskName? </h4>
+    <div class="d-flex justify-content-center">
+
+        <form method="post" asp-action="Delete">
+            <button type="submit">Delete</button>
+            <a asp-controller="Home" asp-action="ViewTasks" class="btn btn-primary">Cancel</a>
+
+            <input type="hidden" asp-for="TaskID" />
+        </form>
+    </div>
+</div>

@@ -128,5 +128,17 @@ namespace TasksApp.Controllers
             // Redirect back to tasks view
             return RedirectToAction("ViewTasks");
         }
+
+        // Return Quadrants page view
+        public IActionResult Quadrants()
+        {
+            var tasks = _taskDbContext.Responses
+                .Include(x => x.Category)
+                .Where(x => x.Completed == false)
+                .OrderBy(x => x.DueDate)
+                .ToList();
+
+            return View(tasks);
+        }
     }
 }
