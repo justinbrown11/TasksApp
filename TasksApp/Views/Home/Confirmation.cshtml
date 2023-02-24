@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Task Submitted";
+}
+
+@model TasksApp.Models.Tasks
+
+@*Confirmation page*@
+<h2>The task "@Model.TaskName" was entered successfully, thank you!</h2>
+
+<a asp-controller="Home" asp-action="ViewTasks">View Tasks</a>
