@@ -31,6 +31,7 @@ namespace TasksApp.Controllers
         {
             var tasks = _taskDbContext.Responses
                 .Include(x => x.Category)
+                .Where(x => x.Completed == false)
                 .OrderBy(x => x.DueDate)
                 .ToList();
 
